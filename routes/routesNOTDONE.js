@@ -13,21 +13,103 @@ const Team = require("../models/team");
 const UserFile = require("../models/userfile");
 
 app.use(cors());
-
+//INDEX
 const dbPass= "xzUkudPgu0FIiNMn"
 
-const uri = "mongodb+srv://dbUser:xzUkudPgu0FIiNMn@cluster0.xanc4.mongodb.net/cddb?retryWrites=true&w=majority";
-
-
 mongoose.connect('mongodb+srv://dbUser:' + dbPassword + '@cluster0.xanc4.mongodb.net/cddb?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true });
-
+//INDEX
 let currentUser = {
-  _id: null,
+  user_id: null,
   username: null,
   email: null,
-  pw_hash: null
+  pw_hash: null,
+  files : null,
+  cotwo_weekly : null,
+  cotwo_total : null,
+  team_id : null
 };
 
+router.get("/:username/files", (req, res, next) => {
+  const { username } = req.params;
+  User.findOne({
+    username
+  })
+    .then(user => {
+      File.find({
+        owner_id: user._id
+      })
+        .then(files => {
+          res.status(200).json({
+            response: files
+          });
+        })
+        .catch(err => {
+          res.status(500).json({ error: err });
+        });
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
+});
+router.get("/:username/keep", (req, res, next) => {
+  
+  User.findOne({
+    username: req.params.username
+  })
+    .exec()
+    .then(user => {
+      if (user == null) {
+        res.status(404).json({ message: "user non existent" });
+      } else {
+        UserFile.updateOne({
+          owner_id : User.findOne({username : req.params.username}),
+          filename : req.params.filename
+        },  { modified_date : new Date().format('m-d-Y h:i:s') })
+          .exec()
+          .then(result => {
+            res.status(200).json({
+              result
+            });
+          })
+          .catch(err => console.log(err));
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.get("/:username/delete", (req, res, next) => {
+  
+  User.findOne({
+    username: req.params.username
+  })
+    .exec()
+    .then(user => {
+      if (user == null) {
+        res.status(404).json({ message: "user non existent" });
+      } else {
+        UserFile.deleteOne({
+          owner_id : User.findOne({username : req.params.username}),
+          filename : req.params.filename
+        })
+          .exec()
+          .then(result => {
+            res.status(200).json({
+              result
+            });
+          })
+          .catch(err => console.log(err));
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+
+
+/*
 router.get("/", (req, res, next) => {
   if (!currentUser._id) {
     // user is not logged -> redirect to public
@@ -263,4 +345,5 @@ router.get("/logout", (req, res, next) => {
   res.status(200).json({ response: "user logged out" });
 });
 
+*/
 module.exports = router;
