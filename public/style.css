@@ -1,0 +1,88 @@
+:root {
+  --background: royalblue;
+  --text: #e7e7e7;
+  --card: #4B0082;
+  --card_border: #DAA520;
+}
+
+html {
+  font-size: 10px;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  background: linear-gradient(var(--background), white);
+}
+
+.header {
+  display: grid;
+  justify-content: center;
+}
+
+.cloud {
+  padding: 10px 0;
+  display: grid;
+  place-content: center;
+  color: lightcyan;
+}
+
+.swipe {
+  display: grid;
+  place-content: center;
+}
+
+.trash {
+  padding: 10px 0;
+  display: grid;
+  place-content: center;
+  color: rgba(0,0,0,0.75);
+}
+
+.card {
+  position: relative;
+  background: var(--card);
+  border-radius: 10px;
+  display: grid;
+  box-shadow: 0 0 5px 1px rgba(0,0,0,0.5);
+  max-width: 300px;
+  word-break: break-all;
+}
+.card_header {
+  padding: 10px;
+  display: grid;
+  justify-content: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.card_icon {
+  background: var(--card_border);
+  display: grid;
+  justify-content: center;
+  padding: 10px;
+}
+.card_details {
+  padding: 10px 20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.disable-select{
+  -webkit-user-select: none;
+}
