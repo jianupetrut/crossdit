@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const UserFileSchema = mongoose.Schema({
   owner_id: String,
+  filename: String,
   content: String,
   location : String,
   filetype : String,
